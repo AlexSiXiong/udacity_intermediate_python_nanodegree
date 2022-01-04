@@ -1,0 +1,5 @@
+__pycache__/
+.idea
+.github
+.DS_Store
+data

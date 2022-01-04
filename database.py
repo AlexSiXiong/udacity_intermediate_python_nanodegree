@@ -43,8 +43,28 @@ class NEODatabase:
         self._approaches = approaches
 
         # TODO: What additional auxiliary data structures will be useful?
-
         # TODO: Link together the NEOs and their close approaches.
+
+        self.designation_neo_dict = dict(zip((i.designation for i in self._neos), self._neos))
+        self.designation_idx_dict = dict(zip((i.designation for i in self._neos), range(len(self._neos))))
+        self.name_neo_dict = dict(zip((i.name for i in self._neos), self._neos))
+        self._link_neo_approaches()
+
+    def _link_neo_approaches(self):
+        # Note:
+        # Each NEO in the data set has a unique primary designation, so each destination corresponds to one neo
+        # Therefore, it is not necessary to map multi-neo to one designation
+
+        # destination_neo_dict = {}
+        # for idx, neo in enumerate(self._neos):
+        #     if neo.designation not in destination_neo_dict.keys():
+        #         destination_neo_dict[neo.designation] = [idx]
+        #     else:
+        #         destination_neo_dict[neo.designation].append(idx)
+
+        for i in self._approaches:
+            if i._designation in self.designation_neo_dict.keys():
+                self._neos[self.designation_idx_dict[i._designation]].approaches.append(i)
 
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
@@ -60,7 +80,7 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
         # TODO: Fetch an NEO by its primary designation.
-        return None
+        return self.designation_neo_dict.get(designation.upper(), None)
 
     def get_neo_by_name(self, name):
         """Find and return an NEO by its name.
@@ -77,7 +97,7 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
         # TODO: Fetch an NEO by its name.
-        return None
+        return self.name_neo_dict.get(name.capitalize(), None)
 
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.
