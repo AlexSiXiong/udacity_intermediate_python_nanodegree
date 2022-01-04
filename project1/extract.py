@@ -70,4 +70,4 @@ def load_approaches(cad_json_path):
 
 
 if __name__ == '__main__':
-    neo_obj_arr = load_neos('./data/neos.csv')
+    neo_obj_arr = load_neos('data/neos.csv')

@@ -21,13 +21,12 @@ import datetime
 import io
 import json
 import pathlib
-import unittest
 import unittest.mock
 
 
-from extract import load_neos, load_approaches
-from database import NEODatabase
-from write import write_to_csv, write_to_json
+from project1.extract import load_neos, load_approaches
+from project1.database import NEODatabase
+from project1.write import write_to_csv, write_to_json
 
 
 TESTS_ROOT = (pathlib.Path(__file__).parent).resolve()

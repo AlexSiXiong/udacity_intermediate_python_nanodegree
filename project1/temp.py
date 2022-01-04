@@ -4,7 +4,7 @@ from collections import Counter
 
 df = pd.DataFrame()
 
-filename = './data/neos.csv'
+filename = 'data/neos.csv'
 
 
 chunksize = 1e6

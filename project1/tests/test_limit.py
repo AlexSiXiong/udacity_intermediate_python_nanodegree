@@ -12,7 +12,7 @@ These tests should pass when Task 3c is complete.
 import collections.abc
 import unittest
 
-from filters import limit
+from project1.filters import limit
 
 
 class TestLimit(unittest.TestCase):
