@@ -16,8 +16,8 @@ import pathlib
 import math
 import unittest
 
-from project1.extract import load_neos, load_approaches
-from project1.models import NearEarthObject, CloseApproach
+from extract import load_neos, load_approaches
+from models import NearEarthObject, CloseApproach
 
 
 TESTS_ROOT = (pathlib.Path(__file__).parent).resolve()

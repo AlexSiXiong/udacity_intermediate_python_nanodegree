@@ -16,6 +16,7 @@ iterator.
 
 You'll edit this file in Tasks 3a and 3c.
 """
+import itertools
 import operator
 
 
@@ -38,6 +39,7 @@ class AttributeFilter:
     Concrete subclasses can override the `get` classmethod to provide custom
     behavior to fetch a desired attribute from the given `CloseApproach`.
     """
+
     def __init__(self, op, value):
         """Construct a new `AttributeFilter` from an binary predicate and a reference value.
 
@@ -49,12 +51,12 @@ class AttributeFilter:
         :param op: A 2-argument predicate comparator (such as `operator.le`).
         :param value: The reference value to compare against.
         """
-        self.op = op
+        self.operator = op
         self.value = value
 
     def __call__(self, approach):
         """Invoke `self(approach)`."""
-        return self.op(self.get(approach), self.value)
+        return self.operator(self.get(approach), self.value)
 
     @classmethod
     def get(cls, approach):
@@ -69,7 +71,44 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
+        return f"{self.__class__.__name__}" \
+               f"(op=operator.{self.operator.__name__}, value={self.value})"
+
+
+class TimeFilter(AttributeFilter):
+    """ `CloseApproach` Date attribute comparator"""
+    @classmethod
+    def get(cls, approach):
+        return approach.time.date()
+
+
+class DistanceFilter(AttributeFilter):
+    """`CloseApproach` Distance attribute comparator"""
+    @classmethod
+    def get(cls, approach):
+        return approach.distance
+
+
+class VelocityFilter(AttributeFilter):
+    """`CloseApproach` Velocity attribute comparator"""
+    @classmethod
+    def get(cls, approach):
+        return approach.velocity
+
+
+class HazardousFilter(AttributeFilter):
+    """`Neo` Hazardous attribute comparator"""
+    @classmethod
+    def get(cls, approach):
+        """Returns hazardous attribute of the neo."""
+        return approach.neo.hazardous
+
+
+class DiameterFilter(AttributeFilter):
+    """`Neo` Diameter attribute comparator"""
+    @classmethod
+    def get(cls, approach):
+        return approach.neo.diameter
 
 
 def create_filters(
@@ -108,8 +147,39 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # TODO: Decide how you will represent your filters.
-    return ()
+
+    date_filter_f = TimeFilter(operator.eq, date) if date else None
+
+    date_start_filter_f = TimeFilter(operator.ge, start_date) if start_date else None
+    date_end_filter_f = TimeFilter(operator.le, end_date) if end_date else None
+
+    distance_min_filter_f = DistanceFilter(operator.ge, distance_min) if distance_min else None
+    distance_max_filter_f = DistanceFilter(operator.le, distance_max) if distance_max else None
+
+    velocity_min_filter_f = VelocityFilter(operator.ge, velocity_min) if velocity_min else None
+    velocity_max_filter_f = VelocityFilter(operator.le, velocity_max) if velocity_max else None
+
+    diameter_min_filter_f = DiameterFilter(operator.ge, diameter_min) if diameter_min else None
+    diameter_max_filter_f = DiameterFilter(operator.le, diameter_max) if diameter_max else None
+
+    # note:
+    # if hazardous else None - fails the tests
+    hazardous_filter_f = HazardousFilter(operator.eq, hazardous) if hazardous is not None else None
+
+    filter_arr = [
+        date_filter_f,
+        date_start_filter_f,
+        date_end_filter_f,
+        distance_min_filter_f,
+        distance_max_filter_f,
+        velocity_min_filter_f,
+        velocity_max_filter_f,
+        diameter_min_filter_f,
+        diameter_max_filter_f,
+        hazardous_filter_f
+    ]
+
+    return [i for i in filter_arr if i]
 
 
 def limit(iterator, n=None):
@@ -121,5 +191,4 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
-    return iterator
+    return iterator if not n else list(itertools.islice(iterator, 0, n))

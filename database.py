@@ -11,6 +11,7 @@ data on NEOs and close approaches extracted by `extract.load_neos` and
 
 You'll edit this file in Tasks 2 and 3.
 """
+from excellent import Trie
 
 
 class NEODatabase:
@@ -50,7 +51,11 @@ class NEODatabase:
         self.name_neo_dict = dict(zip((i.name for i in self._neos), self._neos))
         self._link_neo_approaches()
 
+        self.tire_tree = Trie(self.name_neo_dict)
+
     def _link_neo_approaches(self):
+        # ------------------------------------------------------------------------------------
+        # ------------------------------------------------------------------------------------
         # Note:
         # Each NEO in the data set has a unique primary designation, so each destination corresponds to one neo
         # Therefore, it is not necessary to map multi-neo to one designation
@@ -61,10 +66,13 @@ class NEODatabase:
         #         destination_neo_dict[neo.designation] = [idx]
         #     else:
         #         destination_neo_dict[neo.designation].append(idx)
-
+        # ------------------------------------------------------------------------------------
+        # ------------------------------------------------------------------------------------
         for i in self._approaches:
-            if i._designation in self.designation_neo_dict.keys():
-                self._neos[self.designation_idx_dict[i._designation]].approaches.append(i)
+            # add @property designation in NEO class, avoid access protected _designation
+            if i.designation in self.designation_neo_dict.keys():
+                i.neo = self._neos[self.designation_idx_dict[i.designation]]
+                self._neos[self.designation_idx_dict[i.designation]].approaches.append(i)
 
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
@@ -80,6 +88,7 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
         # TODO: Fetch an NEO by its primary designation.
+
         return self.designation_neo_dict.get(designation.upper(), None)
 
     def get_neo_by_name(self, name):
@@ -97,7 +106,11 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
         # TODO: Fetch an NEO by its name.
-        return self.name_neo_dict.get(name.capitalize(), None)
+        # Solution 1
+        # return self.name_neo_dict.get(name.capitalize(), None)
+
+        # Solution 2
+        return self.tire_tree.search(name.capitalize())
 
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.
@@ -114,5 +127,21 @@ class NEODatabase:
         :return: A stream of matching `CloseApproach` objects.
         """
         # TODO: Generate `CloseApproach` objects that match all of the filters.
-        for approach in self._approaches:
-            yield approach
+        if not filters:
+            for approach in self._approaches:
+                yield approach
+
+        else:
+            for approach in self._approaches:
+                # Solution1:
+                # flag = True
+                # for j in filters:
+                #     if j and not j(approach):
+                #         flag = False
+                #         break
+                # if flag:
+                #     yield approach
+
+                # Solution2:
+                if all(map(lambda f: f(approach), filters)):
+                    yield approach

@@ -15,8 +15,8 @@ import math
 import unittest
 
 
-from project1.extract import load_neos, load_approaches
-from project1.database import NEODatabase
+from extract import load_neos, load_approaches
+from database import NEODatabase
 
 
 # Paths to the test data files.
