@@ -71,43 +71,53 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
+        """Output the description of the class."""
         return f"{self.__class__.__name__}" \
                f"(op=operator.{self.operator.__name__}, value={self.value})"
 
 
 class TimeFilter(AttributeFilter):
-    """ `CloseApproach` Date attribute comparator"""
+    """`CloseApproach` Date attribute comparator."""
+
     @classmethod
     def get(cls, approach):
+        """Get the date."""
         return approach.time.date()
 
 
 class DistanceFilter(AttributeFilter):
-    """`CloseApproach` Distance attribute comparator"""
+    """`CloseApproach` Distance attribute comparator."""
+
     @classmethod
     def get(cls, approach):
+        """Return the distance."""
         return approach.distance
 
 
 class VelocityFilter(AttributeFilter):
-    """`CloseApproach` Velocity attribute comparator"""
+    """`CloseApproach` Velocity attribute comparator."""
+
     @classmethod
     def get(cls, approach):
+        """Return the velocity."""
         return approach.velocity
 
 
 class HazardousFilter(AttributeFilter):
-    """`Neo` Hazardous attribute comparator"""
+    """`Neo` Hazardous attribute comparator."""
+
     @classmethod
     def get(cls, approach):
-        """Returns hazardous attribute of the neo."""
+        """Get hazardous attribute of the neo."""
         return approach.neo.hazardous
 
 
 class DiameterFilter(AttributeFilter):
-    """`Neo` Diameter attribute comparator"""
+    """`Neo` Diameter attribute comparator."""
+
     @classmethod
     def get(cls, approach):
+        """Return the neo diameter."""
         return approach.neo.diameter
 
 
@@ -147,7 +157,6 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-
     date_filter_f = TimeFilter(operator.eq, date) if date else None
 
     date_start_filter_f = TimeFilter(operator.ge, start_date) if start_date else None

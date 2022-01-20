@@ -45,11 +45,12 @@ def load_neos(neo_csv_path):
 
 def load_approaches(cad_json_path):
     """Read close approach data from a JSON file.
+    Load close approach data from the given JSON file.
 
     :param cad_json_path: A path to a JSON file containing data about close approaches.
     :return: A collection of `CloseApproach`es.
     """
-    # TODO: Load close approach data from the given JSON file.
+
     ca_obj_arr = []
     with open(cad_json_path) as f:
         loader = json.load(f)
