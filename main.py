@@ -235,7 +235,8 @@ def query(database, args):
 
 
 class NEOShell(cmd.Cmd):
-    """Perform the `interactive` subcommand.
+    """
+    Perform the `interactive` subcommand.
 
     This is a `cmd.Cmd` shell - a specialized tool for command-based REPL sessions.
 
@@ -246,6 +247,7 @@ class NEOShell(cmd.Cmd):
     inspect and query commands, while only loading the data (which can be quite
     slow) once.
     """
+
     intro = ("Explore close approaches of near-Earth objects. "
              "Type `help` or `?` to list commands and `exit` to exit.\n")
     prompt = '(neo) '

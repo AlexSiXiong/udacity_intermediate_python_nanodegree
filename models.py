@@ -36,9 +36,9 @@ class NearEarthObject:
     # If you make changes, be sure to update the comments in this file.
     def __init__(self, **info):
         """Create a new `NearEarthObject`.
+
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
-
         self.designation = info.get("designation")
         self.name = info.get("name")
         self.diameter = info.get("diameter")
@@ -68,7 +68,7 @@ class NearEarthObject:
                f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})"
 
     def serialize(self):
-        """Return a dict of self attributes"""
+        """Return a dict of self attributes."""
         return {
             'designation': self.designation,
             'name': self.fullname,
@@ -113,7 +113,7 @@ class CloseApproach:
 
     @property
     def designation(self):
-        """Returns designation"""
+        """Return designation."""
         return self._designation
 
     @property
@@ -146,7 +146,7 @@ class CloseApproach:
                f"velocity={self.velocity:.2f}, neo={self.neo!r})"
 
     def csv_serialize(self):
-        """Return a dict of self attributes
+        """Return a dict of self attributes.
 
         Write into csv file requires this func
         """
@@ -161,9 +161,9 @@ class CloseApproach:
         }
 
     def json_serialize(self):
-        """Return a dict of self attributes
+        """Return a dict of self attributes.
 
-        Write into json file requires this func
+        Write into json file requires this func.
         """
         return {
             'datetime_utc':  datetime_to_str(self.time),
